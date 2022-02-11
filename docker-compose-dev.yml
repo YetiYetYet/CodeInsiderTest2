@@ -1,0 +1,36 @@
+﻿version: '3.8'
+services:
+  code-insider-test2:
+    container_name: code-insider-test2
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - "8080:80"
+      - "5000:5000"
+      - "443:443"
+#    depends_on:
+#      - postgres-db
+
+  sql-server-db:
+    container_name: code-insider-sql-server-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+        - "1433:1433"
+        
+  postgres-db:
+    container_name: code-insider-psql-db
+    image: postgres:14.1
+    ports:
+      - "5432:5432"
+    env_file:
+      - secret.env
+    environment:
+      POSTGRES_PASSWORD: password
+      
